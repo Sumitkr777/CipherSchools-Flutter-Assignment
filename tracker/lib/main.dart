@@ -7,6 +7,7 @@ import 'views/home/home_screen.dart';
 import 'views/expense/add_expense_screen.dart';
 import 'views/income/add_income_screen.dart';
 import 'views/profile/profile_screen_new.dart';
+import 'views/initial/intial.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,8 +58,9 @@ class _MyAppState extends State<MyApp> {
           hintStyle: TextStyle(color: Colors.grey[500]),
         ),
       ),
-      initialRoute: AppRoutes.splash,
+      initialRoute: AppRoutes.initial,
       routes: {
+        AppRoutes.initial: (context) => const InitialScreen(),
         AppRoutes.splash: (context) => const SplashScreen(),
         AppRoutes.home: (context) => const HomeScreen(),
         AppRoutes.signup: (context) => const SignUpScreen(),

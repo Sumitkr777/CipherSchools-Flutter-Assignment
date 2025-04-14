@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../core/utils/constants.dart';
 import '../../routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -12,124 +11,128 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
-      backgroundColor: const Color(0xFF7B68EE), // Purple color
+      backgroundColor: const Color(0xFF7B68EE),
       body: Stack(
         children: [
-          // Top-right circular gradient image - rotated
+          // Top-right circular gradient
           Positioned(
-            top: 0,
-            right: 0,
+            top: -MediaQuery.of(context).size.width * 0.2,
+            right: -MediaQuery.of(context).size.width * 0.2,
             child: Transform.rotate(
               angle: 3.14159 / 1,
               child: Image.asset(
                 'assets/splash_screen/recordcircle.png',
-                width: screenWidth * 0.5,
+                width: MediaQuery.of(context).size.width * 0.8,
               ),
             ),
           ),
 
-          // Bottom-left circular gradient image
+          // Bottom-left circular gradient
           Positioned(
-            bottom: 0,
-            left: 0,
+            bottom: -MediaQuery.of(context).size.width * 0.2,
+            left: -MediaQuery.of(context).size.width * 0.2,
             child: Image.asset(
               'assets/splash_screen/recordcircle.png',
-              width: screenWidth * 0.5,
+              width: MediaQuery.of(context).size.width * 0.8,
             ),
           ),
 
-          // Center logo, app name and button
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/splash_screen/Vector.png',
-                  height: 150,
-                  width: 150,
-                ),
-                const SizedBox(height: 16),
-                Image.asset('assets/splash_screen/CipherX.png', height: 32),
-                const SizedBox(height: 24),
-                const Text(
-                  'The best way to track your expenses.',
-                  style: TextStyle(color: Colors.white, fontSize: 16),
-                ),
-                const SizedBox(height: 48),
-                // Get Started Button
-                Container(
-                  width: 56,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(28),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.arrow_forward,
-                      color: Color(0xFF7B68EE),
-                    ),
-                    // Navigate directly to signup screen
-                    onPressed: () => Navigator.pushReplacementNamed(
-                      context,
-                      AppRoutes.signup,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+          // Main content
+          SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 16),
 
-          // Bottom text and progress bar
-          Positioned(
-            bottom: 30,
-            left: 0,
-            right: 0,
-            child: Column(
-              children: [
-                const Text(
-                  AppText.by,
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Text(
-                      AppText.openSource,
-                      style: TextStyle(
-                        color: Color.fromARGB(231, 255, 255, 255),
-                        fontSize: 14,
-                      ),
+                  // Top logo
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Image.asset(
+                      'assets/splash_screen/Vector.png',
+                      height: 80,
+                      width: 80,
                     ),
-                    SizedBox(width: 4),
-                    Text(
-                      AppText.community,
-                      style: TextStyle(color: Color(0xFFFF9800), fontSize: 14),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
-                Container(
-                  width: screenWidth * 0.25,
-                  height: 4,
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(2),
                   ),
-                ),
-              ],
+
+                  const Spacer(),
+
+                  // Row with text section and button at bottom
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 50.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        // Welcome text and subtitle at bottom left
+                        Padding(
+                          padding: const EdgeInsets.only(left: 6.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text(
+                                'Welcome to',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 40,
+                                  
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.1,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Image.asset(
+                                'assets/splash_screen/CipherX.png',
+                                height: 40,
+                              ),
+                              const SizedBox(height: 16),
+                              const Text(
+                                'The best way to track your expenses.',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.2,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        // Get Started Button
+                        Padding(
+                          padding: const EdgeInsets.only(right: 8.0, bottom:45.0),
+                          child: GestureDetector(
+                            onTap:
+                                () => Navigator.pushReplacementNamed(
+                                  context,
+                                  AppRoutes.signup,
+                                ),
+                            child: Container(
+                              width: 70,
+                              height: 70,
+                              decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.25),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Center(
+                                child: Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                  size: 28,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

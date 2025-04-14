@@ -11,13 +11,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _selectedPeriod = 'Today';
   final List<String> _periods = ['Today', 'Week', 'Month', 'Year'];
-  
+
   final double _accountBalance = 38000;
   final double _income = 50000;
   final double _expenses = 12000;
 
   int _selectedNavIndex = 0;
-  
+
   // User profile data is now managed in the ProfileScreen
 
   @override
@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _selectedNavIndex = index;
     });
   }
-  
+
   // Profile functionality has been moved to the dedicated ProfileScreen
 
   void _onPeriodSelected(String period) {
@@ -87,10 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: const Color(0xFFFDF6F0),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(0),
-        child: AppBar(
-          backgroundColor: const Color(0xFFFDF6F0),
-          elevation: 0,
-        ),
+        child: AppBar(backgroundColor: const Color(0xFFFDF6F0), elevation: 0),
       ),
       body: SafeArea(
         child: Padding(
@@ -120,14 +117,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Text(
                           'S',
                           style: TextStyle(
-                            color: Colors.purple,
+                            color: const Color(0xFF9C27B0),
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
                       ),
                     ),
-                    
+
                     // Month selector
                     Row(
                       children: [
@@ -145,7 +142,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    
+
                     // Notification bell
                     Container(
                       padding: const EdgeInsets.all(8),
@@ -161,19 +158,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Account Balance Section
               Center(
                 child: Column(
                   children: [
                     const Text(
                       'Account Balance',
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.grey,
-                      ),
+                      style: TextStyle(fontSize: 16, color: Colors.grey),
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -186,9 +180,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Income & Expense Cards
               Row(
                 children: [
@@ -205,7 +199,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: const [
-                              Icon(Icons.arrow_downward, color: Colors.white, size: 20),
+                              Icon(
+                                Icons.arrow_downward,
+                                color: Colors.white,
+                                size: 20,
+                              ),
                               SizedBox(width: 8),
                               Text(
                                 'Income',
@@ -226,9 +224,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  
+
                   const SizedBox(width: 16),
-                  
+
                   // Expense Card
                   Expanded(
                     child: Container(
@@ -242,7 +240,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         children: [
                           Row(
                             children: const [
-                              Icon(Icons.arrow_upward, color: Colors.white, size: 20),
+                              Icon(
+                                Icons.arrow_upward,
+                                color: Colors.white,
+                                size: 20,
+                              ),
                               SizedBox(width: 8),
                               Text(
                                 'Expenses',
@@ -265,9 +267,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Period selector (Today, Week, Month, Year)
               SizedBox(
                 height: 40,
@@ -283,15 +285,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         margin: const EdgeInsets.only(right: 8),
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
-                          color: isSelected ? const Color(0xFFFFEAC0) : Colors.white,
+                          color:
+                              isSelected
+                                  ? const Color(0xFFFFEAC0)
+                                  : Colors.white,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Center(
                           child: Text(
                             period,
                             style: TextStyle(
-                              color: isSelected ? Colors.amber.shade800 : Colors.grey.shade500,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              color:
+                                  isSelected
+                                      ? Colors.amber.shade800
+                                      : Colors.grey.shade500,
+                              fontWeight:
+                                  isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
                             ),
                           ),
                         ),
@@ -300,22 +311,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   },
                 ),
               ),
-              
+
               const SizedBox(height: 24),
-              
+
               // Recent Transactions
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Text(
                     'Recent Transaction',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 12,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFFE9E1FF),
                       borderRadius: BorderRadius.circular(16),
@@ -327,9 +338,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              
+
               const SizedBox(height: 16),
-              
+
               // Transaction List
               Expanded(
                 child: ListView.builder(
@@ -340,9 +351,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Color bgColor;
                     IconData iconData;
                     Color iconColor;
-                    
+
                     // Set colors and icons based on transaction type
-                    switch(transaction['type']) {
+                    switch (transaction['type']) {
                       case 'Shopping':
                         bgColor = const Color(0xFFFCEDCF);
                         iconData = Icons.shopping_basket_outlined;
@@ -368,7 +379,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         iconData = Icons.attach_money_outlined;
                         iconColor = Colors.grey;
                     }
-                    
+
                     return Container(
                       margin: const EdgeInsets.only(bottom: 16),
                       child: Row(
@@ -380,14 +391,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               color: bgColor,
                               borderRadius: BorderRadius.circular(12),
                             ),
-                            child: Icon(
-                              iconData,
-                              color: iconColor,
-                            ),
+                            child: Icon(iconData, color: iconColor),
                           ),
-                          
+
                           const SizedBox(width: 16),
-                          
+
                           // Description
                           Expanded(
                             child: Column(
@@ -410,7 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ],
                             ),
                           ),
-                          
+
                           // Amount and time
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
@@ -450,61 +458,71 @@ class _HomeScreenState extends State<HomeScreen> {
             shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
             ),
-            builder: (context) => Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Add Transaction',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Income option
-                  ListTile(
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF8E64F2),
-                        shape: BoxShape.circle,
+            builder:
+                (context) => Container(
+                  padding: const EdgeInsets.symmetric(vertical: 20),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Add Transaction',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                      child: const Icon(Icons.arrow_downward, color: Colors.white, size: 20),
-                    ),
-                    title: const Text('Income'),
-                    subtitle: const Text('Add money received'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, AppRoutes.addIncome);
-                    },
-                  ),
-                  // Expense option
-                  ListTile(
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF167AF6),
-                        shape: BoxShape.circle,
+                      const SizedBox(height: 20),
+                      // Income option
+                      ListTile(
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF8E64F2),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.arrow_downward,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                        title: const Text('Income'),
+                        subtitle: const Text('Add money received'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, AppRoutes.addIncome);
+                        },
                       ),
-                      child: const Icon(Icons.arrow_upward, color: Colors.white, size: 20),
-                    ),
-                    title: const Text('Expense'),
-                    subtitle: const Text('Add money spent'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, AppRoutes.addExpense);
-                    },
+                      // Expense option
+                      ListTile(
+                        leading: Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: const BoxDecoration(
+                            color: Color(0xFF167AF6),
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Icon(
+                            Icons.arrow_upward,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                        title: const Text('Expense'),
+                        subtitle: const Text('Add money spent'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(context, AppRoutes.addExpense);
+                        },
+                      ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
           );
         },
         backgroundColor: const Color(0xFF9C68FE),
         elevation: 0,
-        child: const Icon(Icons.add),
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, color: Colors.white),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
@@ -526,7 +544,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Icon(
                         Icons.home_rounded,
-                        color: _selectedNavIndex == 0 ? const Color(0xFF9C68FE) : Colors.grey,
+                        color:
+                            _selectedNavIndex == 0
+                                ? const Color(0xFF9C68FE)
+                                : Colors.grey,
                         size: 24,
                       ),
                       const SizedBox(height: 2),
@@ -534,14 +555,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         'Home',
                         style: TextStyle(
                           fontSize: 10,
-                          color: _selectedNavIndex == 0 ? const Color(0xFF9C68FE) : Colors.grey,
+                          color:
+                              _selectedNavIndex == 0
+                                  ? const Color(0xFF9C68FE)
+                                  : Colors.grey,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              
+
               // Transactions
               GestureDetector(
                 onTap: () => _onNavItemTapped(1),
@@ -552,7 +576,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Icon(
                         Icons.swap_horiz_rounded,
-                        color: _selectedNavIndex == 1 ? const Color(0xFF9C68FE) : Colors.grey,
+                        color:
+                            _selectedNavIndex == 1
+                                ? const Color(0xFF9C68FE)
+                                : Colors.grey,
                         size: 24,
                       ),
                       const SizedBox(height: 2),
@@ -560,17 +587,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         'Transaction',
                         style: TextStyle(
                           fontSize: 10,
-                          color: _selectedNavIndex == 1 ? const Color(0xFF9C68FE) : Colors.grey,
+                          color:
+                              _selectedNavIndex == 1
+                                  ? const Color(0xFF9C68FE)
+                                  : Colors.grey,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              
+
               // Spacer for FAB
               const SizedBox(width: 40),
-              
+
               // Budget
               GestureDetector(
                 onTap: () => _onNavItemTapped(2),
@@ -581,7 +611,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Icon(
                         Icons.pie_chart_outline_rounded,
-                        color: _selectedNavIndex == 2 ? const Color(0xFF9C68FE) : Colors.grey,
+                        color:
+                            _selectedNavIndex == 2
+                                ? const Color(0xFF9C68FE)
+                                : Colors.grey,
                         size: 24,
                       ),
                       const SizedBox(height: 2),
@@ -589,14 +622,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         'Budget',
                         style: TextStyle(
                           fontSize: 10,
-                          color: _selectedNavIndex == 2 ? const Color(0xFF9C68FE) : Colors.grey,
+                          color:
+                              _selectedNavIndex == 2
+                                  ? const Color(0xFF9C68FE)
+                                  : Colors.grey,
                         ),
                       ),
                     ],
                   ),
                 ),
               ),
-              
+
               // Profile
               GestureDetector(
                 onTap: () => _onNavItemTapped(3),
@@ -607,7 +643,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Icon(
                         Icons.person_outline_rounded,
-                        color: _selectedNavIndex == 3 ? const Color(0xFF9C68FE) : Colors.grey,
+                        color:
+                            _selectedNavIndex == 3
+                                ? const Color(0xFF9C68FE)
+                                : Colors.grey,
                         size: 24,
                       ),
                       const SizedBox(height: 2),
@@ -615,7 +654,10 @@ class _HomeScreenState extends State<HomeScreen> {
                         'Profile',
                         style: TextStyle(
                           fontSize: 10,
-                          color: _selectedNavIndex == 3 ? const Color(0xFF9C68FE) : Colors.grey,
+                          color:
+                              _selectedNavIndex == 3
+                                  ? const Color(0xFF9C68FE)
+                                  : Colors.grey,
                         ),
                       ),
                     ],

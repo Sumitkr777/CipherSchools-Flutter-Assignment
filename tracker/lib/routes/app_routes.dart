@@ -1,4 +1,5 @@
 class AppRoutes {
+  static const initial = '/initial';
   static const splash = '/';
   static const home = '/home';
   static const signup = '/signup';
