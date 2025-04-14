@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 import '../../services/auth_service.dart';
 import '../../routes/app_routes.dart';
 
@@ -12,9 +14,66 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   // Mock data for user profile
-  String _userName = 'Khushi Sharma';
+  String _userName = 'Sumit Kumar';
   String? _userPhotoUrl;
+  File? _imageFile;
   final AuthService _authService = AuthService();
+  final ImagePicker _picker = ImagePicker();
+
+  // Method to pick image from gallery
+  Future<void> _getImageFromGallery() async {
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        _imageFile = File(image.path);
+      });
+      // Here you would typically upload the image to your backend or Firebase Storage
+      // and then update the _userPhotoUrl
+    }
+  }
+
+  // Method to take a picture with the camera
+  Future<void> _getImageFromCamera() async {
+    final XFile? photo = await _picker.pickImage(source: ImageSource.camera);
+    if (photo != null) {
+      setState(() {
+        _imageFile = File(photo.path);
+      });
+      // Here you would typically upload the image to your backend or Firebase Storage
+      // and then update the _userPhotoUrl
+    }
+  }
+
+  // Method to show image source selection dialog
+  void _showImageSourceActionSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: const Icon(Icons.photo_library),
+                title: const Text('Photo Library'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _getImageFromGallery();
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.photo_camera),
+                title: const Text('Camera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _getImageFromCamera();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,36 +105,60 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Row(
               children: [
                 // Profile image with purple border
-                Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: const Color(0xFF9662F1),
-                      width: 2,
+                GestureDetector(
+                  onTap: _showImageSourceActionSheet,
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: const Color(0xFF9662F1),
+                        width: 2,
+                      ),
                     ),
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(40),
-                    child: _userPhotoUrl != null
-                        ? Image.network(
-                            _userPhotoUrl!,
-                            fit: BoxFit.cover,
-                          )
-                        : Container(
-                            color: const Color(0xFFF0E6FE),
-                            child: const Center(
-                              child: Text(
-                                'K',
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF9662F1),
-                                ),
-                              ),
+                    child: Stack(
+                      children: [
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(40),
+                          child:
+                              _userPhotoUrl != null
+                                  ? Image.network(_userPhotoUrl!, fit: BoxFit.cover)
+                                  : _imageFile != null
+                                      ? Image.file(_imageFile!, fit: BoxFit.cover)
+                                      : Container(
+                                          color: const Color(0xFFF0E6FE),
+                                          child: const Center(
+                                            child: Text(
+                                              'K',
+                                              style: TextStyle(
+                                                fontSize: 30,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xFF9662F1),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                        ),
+                        // Camera icon overlay
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFF9662F1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.camera_alt,
+                              color: Colors.white,
+                              size: 16,
                             ),
                           ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(width: 15),
@@ -86,10 +169,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     children: [
                       const Text(
                         'Username',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 14, color: Colors.grey),
                       ),
                       const SizedBox(height: 5),
                       Text(
@@ -104,18 +184,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 // Edit button
                 IconButton(
-                  icon: const Icon(
-                    Icons.edit_outlined,
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    // Handle edit profile
-                  },
+                  icon: const Icon(Icons.edit_outlined, color: Colors.grey),
+                  onPressed: _showImageSourceActionSheet,
                 ),
               ],
             ),
           ),
-          
+
           // White card with menu options
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -134,7 +209,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Handle account tap
                   },
                 ),
-                
+
                 // Settings option
                 _buildProfileOption(
                   icon: Icons.settings,
@@ -144,7 +219,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Handle settings tap
                   },
                 ),
-                
+
                 // Export Data option
                 _buildProfileOption(
                   icon: Icons.upload_outlined,
@@ -154,7 +229,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     // Handle export data tap
                   },
                 ),
-                
+
                 // Logout option
                 _buildProfileOption(
                   icon: Icons.logout,
@@ -166,10 +241,71 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ],
             ),
           ),
-          
+
           const Spacer(),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Show options dialog like in home screen
+          showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.transparent,
+            builder: (context) => Container(
+              // You can customize the options shown here
+              padding: const EdgeInsets.all(20),
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(20),
+                  topRight: Radius.circular(20),
+                ),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Add your options here
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.green[100],
+                      child: const Icon(
+                        Icons.arrow_downward,
+                        color: Colors.white,
+                      ),
+                    ),
+                    title: const Text('Income'),
+                    subtitle: const Text('Add money received'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, AppRoutes.addIncome);
+                    },
+                  ),
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.red[100],
+                      child: const Icon(
+                        Icons.arrow_upward,
+                        color: Colors.white,
+                      ),
+                    ),
+                    title: const Text('Expense'),
+                    subtitle: const Text('Add money spent'),
+                    onTap: () {
+                      Navigator.pop(context);
+                      Navigator.pushNamed(context, AppRoutes.addExpense);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+        backgroundColor: const Color(0xFF9C68FE),
+        elevation: 0,
+        shape: const CircleBorder(),
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         notchMargin: 8,
@@ -189,24 +325,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: const [
-                      Icon(
-                        Icons.home_rounded,
-                        color: Colors.grey,
-                        size: 24,
-                      ),
+                      Icon(Icons.home_rounded, color: Colors.grey, size: 24),
                       SizedBox(height: 2),
                       Text(
                         'Home',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 10, color: Colors.grey),
                       ),
                     ],
                   ),
                 ),
               ),
-              
+
               // Transactions
               GestureDetector(
                 onTap: () {
@@ -225,19 +354,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(height: 2),
                       Text(
                         'Transaction',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 10, color: Colors.grey),
                       ),
                     ],
                   ),
                 ),
               ),
-              
+
               // Spacer for FAB
               const SizedBox(width: 40),
-              
+
               // Budget
               GestureDetector(
                 onTap: () {
@@ -256,16 +382,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       SizedBox(height: 2),
                       Text(
                         'Budget',
-                        style: TextStyle(
-                          fontSize: 10,
-                          color: Colors.grey,
-                        ),
+                        style: TextStyle(fontSize: 10, color: Colors.grey),
                       ),
                     ],
                   ),
                 ),
               ),
-              
+
               // Profile - already active
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
@@ -280,10 +403,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(height: 2),
                     Text(
                       'Profile',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Color(0xFF9C68FE),
-                      ),
+                      style: TextStyle(fontSize: 10, color: Color(0xFF9C68FE)),
                     ),
                   ],
                 ),
@@ -292,18 +412,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushReplacementNamed(context, AppRoutes.home);
-        },
-        backgroundColor: const Color(0xFF9C68FE),
-        elevation: 0,
-        child: const Icon(Icons.add),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
-  
+
   // Helper method to build profile menu options
   Widget _buildProfileOption({
     required IconData icon,
@@ -326,11 +437,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: color.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: Icon(
-                icon,
-                color: color,
-                size: 20,
-              ),
+              child: Icon(icon, color: color, size: 20),
             ),
             const SizedBox(width: 16),
             // Label
@@ -347,7 +454,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       ),
     );
   }
-  
+
   // Sign out method
   Future<void> _signOut() async {
     try {
