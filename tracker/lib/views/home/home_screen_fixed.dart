@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../routes/app_routes.dart';
+import '../../services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,11 +18,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   int _selectedNavIndex = 0;
   
-  // User profile data is now managed in the ProfileScreen
+  // Auth service for accessing user data
+  final AuthService _authService = AuthService();
+  String _userName = 'S';
+  String? _userPhotoUrl;
 
   @override
   void initState() {
     super.initState();
+    _loadUserData();
+  }
+
+  void _loadUserData() {
+    // Set default user data to match the design
+    setState(() {
+      _userName = 'S';
+      _userPhotoUrl = null;
+    });
   }
 
   final List<Map<String, dynamic>> _recentTransactions = [
@@ -61,19 +73,75 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
 
   void _onNavItemTapped(int index) {
-    // If profile tab is selected, navigate to profile screen
-    if (index == 3) {
-      Navigator.pushNamed(context, AppRoutes.profile);
-      return;
-    }
-
-    // For other tabs, just update the selected index
     setState(() {
       _selectedNavIndex = index;
     });
+    
+    // Handle profile tab click to show sign out option
+    if (index == 3) {
+      _showProfileOptions();
+    }
   }
   
-  // Profile functionality has been moved to the dedicated ProfileScreen
+  void _showProfileOptions() {
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) => Container(
+        padding: const EdgeInsets.symmetric(vertical: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: CircleAvatar(
+                backgroundColor: Colors.grey[200],
+                backgroundImage: _userPhotoUrl != null ? NetworkImage(_userPhotoUrl!) : null,
+                child: _userPhotoUrl == null ? const Icon(Icons.person, color: Colors.grey) : null,
+              ),
+              title: Text(_userName),
+              subtitle: const Text('user@example.com'),
+            ),
+            const Divider(),
+            ListTile(
+              leading: const Icon(Icons.settings, color: Colors.grey),
+              title: const Text('Settings'),
+              onTap: () {
+                Navigator.pop(context);
+                // TODO: Navigate to settings screen
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text('Sign Out', style: TextStyle(color: Colors.red)),
+              onTap: () async {
+                Navigator.pop(context);
+                await _signOut();
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Future<void> _signOut() async {
+    try {
+      await _authService.signOut();
+      if (mounted) {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/signup',
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error signing out: ${e.toString()}')),
+      );
+    }
+  }
 
   void _onPeriodSelected(String period) {
     setState(() {
@@ -443,65 +511,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Show a menu with income and expense options
-          showModalBottomSheet(
-            context: context,
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-            ),
-            builder: (context) => Container(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text(
-                    'Add Transaction',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  // Income option
-                  ListTile(
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF8E64F2),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.arrow_downward, color: Colors.white, size: 20),
-                    ),
-                    title: const Text('Income'),
-                    subtitle: const Text('Add money received'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, AppRoutes.addIncome);
-                    },
-                  ),
-                  // Expense option
-                  ListTile(
-                    leading: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: const BoxDecoration(
-                        color: Color(0xFF167AF6),
-                        shape: BoxShape.circle,
-                      ),
-                      child: const Icon(Icons.arrow_upward, color: Colors.white, size: 20),
-                    ),
-                    title: const Text('Expense'),
-                    subtitle: const Text('Add money spent'),
-                    onTap: () {
-                      Navigator.pop(context);
-                      Navigator.pushNamed(context, AppRoutes.addExpense);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+        onPressed: () {},
         backgroundColor: const Color(0xFF9C68FE),
         elevation: 0,
         child: const Icon(Icons.add),

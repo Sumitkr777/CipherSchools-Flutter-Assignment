@@ -1,7 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import '../../core/utils/constants.dart';
-import '../home/home_screen.dart'; // Import your HomeScreen
+import '../../routes/app_routes.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,19 +10,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-
-    // Navigate to HomeScreen after 2 seconds
-    Timer(const Duration(seconds: 2), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const HomeScreen()),
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -56,7 +42,7 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
 
-          // Center logo and app name
+          // Center logo, app name and button
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -68,6 +54,39 @@ class _SplashScreenState extends State<SplashScreen> {
                 ),
                 const SizedBox(height: 16),
                 Image.asset('assets/splash_screen/CipherX.png', height: 32),
+                const SizedBox(height: 24),
+                const Text(
+                  'The best way to track your expenses.',
+                  style: TextStyle(color: Colors.white, fontSize: 16),
+                ),
+                const SizedBox(height: 48),
+                // Get Started Button
+                Container(
+                  width: 56,
+                  height: 56,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(28),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.arrow_forward,
+                      color: Color(0xFF7B68EE),
+                    ),
+                    // Navigate directly to signup screen
+                    onPressed: () => Navigator.pushReplacementNamed(
+                      context,
+                      AppRoutes.signup,
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
