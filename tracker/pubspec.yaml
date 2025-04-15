@@ -49,6 +49,16 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^5.0.0
+  flutter_launcher_icons: ^0.13.1
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/splash_screen/Vector.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#7B68EE" # Purple background color
+  adaptive_icon_foreground: "assets/splash_screen/Vector.png"
+  remove_alpha_ios: true
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -80,11 +90,16 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: ABeeZee
-  #     fonts:
-  #       - asset: fonts/ABeeZee-Italic.ttf
-  #       - asset: fonts/ABeeZee-Regular.ttf
+  fonts:
+    - family: ABeeZee
+      fonts:
+        - asset: assets/fonts/ABeeZee-Regular.ttf
+        - asset: assets/fonts/ABeeZee-Italic.ttf
+          style: italic
+    
+    - family: BrunoAceSC
+      fonts:
+        - asset: assets/fonts/BrunoAceSC-Regular.ttf
          
   #   - family: Trajan Pro
   #     fonts:

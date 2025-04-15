@@ -41,7 +41,7 @@ class _SplashScreenState extends State<SplashScreen> {
           // Main content
           SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              padding: const EdgeInsets.symmetric(horizontal: 40.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -49,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
                   // Top logo
                   Padding(
-                    padding: const EdgeInsets.only(left: 8.0),
+                    padding: const EdgeInsets.only(left: 0.0),
                     child: Image.asset(
                       'assets/splash_screen/Vector.png',
                       height: 80,
@@ -59,41 +59,46 @@ class _SplashScreenState extends State<SplashScreen> {
 
                   const Spacer(),
 
-                  // Row with text section and button at bottom
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 50.0),
+                  // Text and button directly in one row with button aligned next to text
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 50.0),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        // Welcome text and subtitle at bottom left
-                        Padding(
-                          padding: const EdgeInsets.only(left: 6.0),
+                        // Text section
+                        Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
+                            children: const [
+                              Text(
                                 'Welcome to',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 40,
-                                  
+                                  fontSize: 32,
+                                  fontFamily: 'ABeeZee',
                                   fontWeight: FontWeight.w400,
                                   height: 1.1,
                                 ),
                               ),
-                              const SizedBox(height: 8),
-                              Image.asset(
-                                'assets/splash_screen/CipherX.png',
-                                height: 40,
+                              SizedBox(height: 8),
+                              Text(
+                                'CipherX.',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 36,
+                                  fontFamily: 'BrunoAceSC',
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.1,
+                                ),
                               ),
-                              const SizedBox(height: 16),
-                              const Text(
+                              SizedBox(height: 16),
+                              Text(
                                 'The best way to track your expenses.',
                                 style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 16,
+                                  fontFamily: 'ABeeZee',
                                   fontWeight: FontWeight.w400,
                                   height: 1.2,
                                 ),
@@ -102,28 +107,25 @@ class _SplashScreenState extends State<SplashScreen> {
                           ),
                         ),
 
-                        // Get Started Button
-                        Padding(
-                          padding: const EdgeInsets.only(right: 8.0, bottom:45.0),
+                        // No spacing between text and button
+                        Container(
+                          height: 70,
+                          width: 70,
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.25),
+                            shape: BoxShape.circle,
+                          ),
                           child: GestureDetector(
                             onTap:
                                 () => Navigator.pushReplacementNamed(
                                   context,
                                   AppRoutes.signup,
                                 ),
-                            child: Container(
-                              width: 70,
-                              height: 70,
-                              decoration: BoxDecoration(
-                                color: Colors.white.withOpacity(0.25),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Center(
-                                child: Icon(
-                                  Icons.arrow_forward,
-                                  color: Colors.white,
-                                  size: 28,
-                                ),
+                            child: const Center(
+                              child: Icon(
+                                Icons.arrow_forward,
+                                color: Colors.white,
+                                size: 28,
                               ),
                             ),
                           ),
